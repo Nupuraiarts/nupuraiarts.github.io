@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NupurAIArts - AI Art Tutorials, Prompts & Web3 Guides</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--primary:#7c3aed;--secondary:#ec4899;--accent:#06b6d4;--neon-green:#10b981;--neon-orange:#f59e0b;--dark:#0f0a1a;--darker:#080510;--card-bg:rgba(255,255,255,0.05)}
+        html{scroll-behavior:smooth}
+        body{font-family:'Poppins',sans-serif;background:var(--darker);color:#fff;overflow-x:hidden}
+
+        /* BACKGROUND */
+        .bg-animation{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;background:linear-gradient(135deg,#0f0a1a 0%,#1a0a2e 25%,#0a1628 50%,#1a0a2e 75%,#0f0a1a 100%)}
+        .bg-animation::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at 20% 50%,rgba(124,58,237,0.15) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(236,72,153,0.15) 0%,transparent 50%),radial-gradient(circle at 50% 80%,rgba(6,182,212,0.1) 0%,transparent 50%);animation:bgPulse 8s ease-in-out infinite alternate}
+        @keyframes bgPulse{0%{opacity:.5}100%{opacity:1}}
+        .floating-orbs{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+        .orb{position:absolute;border-radius:50%;filter:blur(80px);animation:floatOrb 20s ease-in-out infinite}
+        .orb:nth-child(1){width:400px;height:400px;background:rgba(124,58,237,0.2);top:10%;left:10%}
+        .orb:nth-child(2){width:300px;height:300px;background:rgba(236,72,153,0.15);top:60%;right:10%;animation-delay:-5s}
+        .orb:nth-child(3){width:350px;height:350px;background:rgba(6,182,212,0.15);bottom:10%;left:30%;animation-delay:-10s}
+        .orb:nth-child(4){width:250px;height:250px;background:rgba(16,185,129,0.1);top:30%;right:30%;animation-delay:-15s}
+        @keyframes floatOrb{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(100px,-50px) scale(1.1)}50%{transform:translate(-50px,100px) scale(0.9)}75%{transform:translate(50px,50px) scale(1.05)}}
+        .particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+        .particle{position:absolute;width:3px;height:3px;background:rgba(255,255,255,0.3);border-radius:50%;animation:twinkle 3s ease-in-out infinite}
+        @keyframes twinkle{0%,100%{opacity:0;transform:scale(0)}50%{opacity:1;transform:scale(1)}}
+
+        /* NAVBAR */
+        .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:15px 50px;display:flex;justify-content:space-between;align-items:center;transition:all .4s}
+        .navbar.scrolled{background:rgba(15,10,26,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(124,58,237,0.2);padding:10px 50px}
+        .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+        .logo-icon{width:45px;height:45px;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;font-family:'Orbitron',sans-serif;color:#fff;position:relative;overflow:hidden}
+        .logo-icon::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,255,255,0.1),transparent);animation:logoShine 3s ease-in-out infinite}
+        @keyframes logoShine{0%{transform:translateX(-100%) rotate(45deg)}100%{transform:translateX(100%) rotate(45deg)}}
+        .logo-text{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:800;background:linear-gradient(135deg,#fff,#c4b5fd,#f0abfc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .nav-links{display:flex;list-style:none;gap:30px;align-items:center}
+        .nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-weight:500;font-size:14px;text-transform:uppercase;letter-spacing:1px;transition:all .3s;position:relative}
+        .nav-links a::after{content:'';position:absolute;bottom:-5px;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width .3s}
+        .nav-links a:hover{color:#fff}
+        .nav-links a:hover::after{width:100%}
+        .nav-cta{background:linear-gradient(135deg,var(--primary),var(--secondary))!important;-webkit-background-clip:unset!important;-webkit-text-fill-color:white!important;padding:10px 25px;border-radius:50px;font-weight:600!important;box-shadow:0 0 20px rgba(124,58,237,0.3)}
+        .nav-cta::after{display:none!important}
+        .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:1001}
+        .hamburger span{width:28px;height:3px;background:#fff;border-radius:3px;transition:all .3s}
+        .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+        .hamburger.active span:nth-child(2){opacity:0}
+        .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(7px,-6px)}
+
+        /* HERO */
+        .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 50px 80px;position:relative}
+        .hero-content{max-width:800px;text-align:center;position:relative;z-index:2}
+        .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);padding:8px 20px;border-radius:50px;font-size:13px;color:#c4b5fd;margin-bottom:30px;animation:fadeInUp .8s ease}
+        .hero-badge .dot{width:8px;height:8px;background:var(--neon-green);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+        @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,0.4)}50%{box-shadow:0 0 0 10px rgba(16,185,129,0)}}
+        .hero h1{font-family:'Orbitron',sans-serif;font-size:58px;font-weight:900;line-height:1.1;margin-bottom:20px;animation:fadeInUp .8s ease .2s both}
+        .hero h1 .gradient-text{background:linear-gradient(135deg,#7c3aed,#ec4899,#06b6d4,#10b981);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradientFlow 4s ease infinite}
+        @keyframes gradientFlow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        .hero p{font-size:18px;color:rgba(255,255,255,0.7);line-height:1.7;margin-bottom:40px;animation:fadeInUp .8s ease .4s both}
+        .hero-buttons{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;animation:fadeInUp .8s ease .6s both}
+        .btn-primary{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;padding:16px 40px;border-radius:50px;text-decoration:none;font-weight:600;font-size:15px;display:inline-flex;align-items:center;gap:10px;transition:all .3s;box-shadow:0 0 30px rgba(124,58,237,0.3);border:none;cursor:pointer;position:relative;overflow:hidden;font-family:'Poppins',sans-serif}
+        .btn-primary:hover{transform:translateY(-3px);box-shadow:0 10px 40px rgba(124,58,237,0.5)}
+        .btn-secondary{background:rgba(255,255,255,0.05);color:#fff;padding:16px 40px;border-radius:50px;text-decoration:none;font-weight:600;font-size:15px;display:inline-flex;align-items:center;gap:10px;transition:all .3s;border:1px solid rgba(255,255,255,0.15);cursor:pointer;font-family:'Poppins',sans-serif}
+        .btn-secondary:hover{background:rgba(255,255,255,0.1);border-color:rgba(124,58,237,0.5);transform:translateY(-3px)}
+        .hero-stats{display:flex;justify-content:center;gap:60px;margin-top:60px;animation:fadeInUp .8s ease .8s both}
+        .stat{text-align:center}
+        .stat-number{font-family:'Orbitron',sans-serif;font-size:32px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--neon-green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .stat-label{font-size:13px;color:rgba(255,255,255,0.5);margin-top:5px;text-transform:uppercase;letter-spacing:1px}
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+        .scroll-indicator{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;animation:fadeInUp .8s ease 1s both}
+        .scroll-indicator span{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.4)}
+        .scroll-mouse{width:24px;height:38px;border:2px solid rgba(255,255,255,0.3);border-radius:12px;position:relative}
+        .scroll-mouse::after{content:'';width:4px;height:8px;background:var(--primary);border-radius:4px;position:absolute;top:6px;left:50%;transform:translateX(-50%);animation:scrollDown 2s ease-in-out infinite}
+        @keyframes scrollDown{0%{transform:translateX(-50%) translateY(0);opacity:1}100%{transform:translateX(-50%) translateY(15px);opacity:0}}
+
+        /* SECTIONS */
+        section{padding:100px 50px;position:relative}
+        .section-header{text-align:center;margin-bottom:70px}
+        .section-tag{display:inline-flex;align-items:center;gap:8px;font-size:13px;text-transform:uppercase;letter-spacing:3px;color:var(--accent);margin-bottom:15px;font-weight:600}
+        .section-title{font-family:'Orbitron',sans-serif;font-size:42px;font-weight:800;margin-bottom:15px;line-height:1.2}
+        .section-subtitle{color:rgba(255,255,255,0.5);font-size:16px;max-width:600px;margin:0 auto;line-height:1.7}
+        .section-divider{height:1px;max-width:1200px;margin:0 auto;background:linear-gradient(90deg,transparent,rgba(124,58,237,0.3),rgba(236,72,153,0.3),transparent)}
+
+        /* FEATURES */
+        .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:30px;max-width:1200px;margin:0 auto}
+        .feature-card{background:var(--card-bg);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:40px 30px;transition:all .4s;position:relative;overflow:hidden;cursor:pointer}
+        .feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--secondary),var(--accent));opacity:0;transition:opacity .3s}
+        .feature-card:hover::before{opacity:1}
+        .feature-card:hover{transform:translateY(-10px);border-color:rgba(124,58,237,0.3);box-shadow:0 20px 60px rgba(124,58,237,0.15)}
+        .feature-icon{width:70px;height:70px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:25px}
+        .feature-card:nth-child(1) .feature-icon{background:linear-gradient(135deg,rgba(124,58,237,0.2),rgba(124,58,237,0.05));color:#a78bfa}
+        .feature-card:nth-child(2) .feature-icon{background:linear-gradient(135deg,rgba(236,72,153,0.2),rgba(236,72,153,0.05));color:#f472b6}
+        .feature-card:nth-child(3) .feature-icon{background:linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.05));color:#22d3ee}
+        .feature-card:nth-child(4) .feature-icon{background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(245,158,11,0.05));color:#fbbf24}
+        .feature-card h3{font-size:20px;font-weight:700;margin-bottom:12px}
+        .feature-card p{color:rgba(255,255,255,0.5);font-size:14px;line-height:1.7}
+        .feature-tag{display:inline-block;margin-top:20px;font-size:12px;padding:5px 15px;border-radius:50px;background:rgba(124,58,237,0.1);color:#c4b5fd;border:1px solid rgba(124,58,237,0.2)}
+
+        /* PRODUCTS */
+        .products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;max-width:1200px;margin:0 auto}
+        .product-card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.08);border-radius:24px;overflow:hidden;transition:all .4s}
+        .product-card:hover{transform:translateY(-8px);border-color:rgba(124,58,237,0.3);box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+        .product-thumb{height:200px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:60px}
+        .product-type-badge{position:absolute;top:15px;left:15px;padding:5px 14px;border-radius:50px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px)}
+        .product-price-badge{position:absolute;top:15px;right:15px;padding:5px 14px;border-radius:50px;font-size:13px;font-weight:700;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff}
+        .product-info{padding:25px}
+        .product-info h3{font-size:18px;font-weight:700;margin-bottom:10px;line-height:1.4}
+        .product-info p{color:rgba(255,255,255,0.5);font-size:13px;line-height:1.6;margin-bottom:20px}
+        .product-actions{display:flex;gap:10px}
+        .product-btn{flex:1;padding:12px;border-radius:12px;border:none;font-weight:600;font-size:13px;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px;font-family:'Poppins',sans-serif;text-decoration:none}
+        .product-btn.buy{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff}
+        .product-btn.buy:hover{box-shadow:0 0 30px rgba(124,58,237,0.4);transform:translateY(-2px)}
+        .product-btn.preview{background:rgba(255,255,255,0.05);color:#fff;border:1px solid rgba(255,255,255,0.15)}
+
+        /* PROMPTS */
+        .prompts-container{max-width:900px;margin:0 auto}
+        .prompt-card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:30px;margin-bottom:20px;transition:all .4s;position:relative;overflow:hidden}
+        .prompt-card:hover{border-color:rgba(124,58,237,0.3);transform:translateX(5px)}
+        .prompt-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;gap:10px}
+        .prompt-category{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--accent);font-weight:600}
+        .prompt-lock{padding:4px 12px;border-radius:50px;font-size:11px;display:flex;align-items:center;gap:5px}
+        .prompt-lock.free-lock{background:rgba(16,185,129,0.15);color:var(--neon-green)}
+        .prompt-lock.premium-lock{background:rgba(245,158,11,0.15);color:var(--neon-orange)}
+        .prompt-card h3{font-size:18px;margin-bottom:10px}
+        .prompt-preview{background:rgba(0,0,0,0.3);border-radius:12px;padding:15px 20px;font-family:'Courier New',monospace;font-size:13px;color:rgba(255,255,255,0.6);line-height:1.6;word-break:break-word}
+        .prompt-preview.blurred{filter:blur(4px);user-select:none}
+        .prompt-actions{display:flex;gap:10px;margin-top:15px}
+        .prompt-btn{padding:8px 20px;border-radius:50px;font-size:12px;font-weight:600;cursor:pointer;transition:all .3s;border:none;display:flex;align-items:center;gap:5px;font-family:'Poppins',sans-serif}
+        .prompt-btn.copy{background:rgba(124,58,237,0.15);color:#c4b5fd}
+        .prompt-btn.copy:hover{background:rgba(124,58,237,0.3)}
+        .prompt-btn.unlock{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff}
+
+        /* WEB3 */
+        .web3-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;max-width:1200px;margin:0 auto}
+        .web3-card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:30px;transition:all .4s;cursor:pointer;text-align:center}
+        .web3-card:hover{transform:translateY(-8px);border-color:rgba(6,182,212,0.3)}
+        .web3-icon{width:80px;height:80px;margin:0 auto 20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;background:linear-gradient(135deg,rgba(6,182,212,0.15),rgba(16,185,129,0.1));color:var(--accent);position:relative}
+        .web3-icon::after{content:'';position:absolute;width:100%;height:100%;border-radius:50%;border:2px dashed rgba(6,182,212,0.2);animation:rotate 10s linear infinite}
+        @keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        .web3-card h3{font-size:18px;margin-bottom:10px}
+        .web3-card p{color:rgba(255,255,255,0.5);font-size:13px;line-height:1.6}
+        .web3-card .learn-more{display:inline-flex;align-items:center;gap:5px;color:var(--accent);font-size:13px;font-weight:600;margin-top:15px;text-decoration:none;transition:gap .3s}
+        .web3-card:hover .learn-more{gap:10px}
+
+        /* OFFERS */
+        .offers-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;max-width:1200px;margin:0 auto}
+        .offer-card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:40px 30px;position:relative;overflow:hidden;transition:all .4s}
+        .offer-card.featured{border-color:rgba(124,58,237,0.4);background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(236,72,153,0.05))}
+        .offer-card:hover{transform:translateY(-8px);box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+        .offer-ribbon{position:absolute;top:20px;right:-35px;background:linear-gradient(135deg,var(--secondary),var(--primary));color:#fff;padding:5px 40px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;transform:rotate(45deg)}
+        .offer-card h3{font-family:'Orbitron',sans-serif;font-size:22px;margin-bottom:10px}
+        .offer-subtitle{color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:25px}
+        .offer-price{display:flex;align-items:baseline;gap:10px;margin-bottom:25px}
+        .offer-price .amount{font-family:'Orbitron',sans-serif;font-size:40px;font-weight:800;background:linear-gradient(135deg,#fff,#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .offer-price .original{color:rgba(255,255,255,0.3);text-decoration:line-through;font-size:18px}
+        .offer-price .period{color:rgba(255,255,255,0.4);font-size:14px}
+        .offer-features{list-style:none;margin-bottom:30px}
+        .offer-features li{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:14px;color:rgba(255,255,255,0.7)}
+        .offer-features li i{color:var(--neon-green);font-size:12px}
+        .offer-features li.disabled{color:rgba(255,255,255,0.25)}
+        .offer-features li.disabled i{color:rgba(255,255,255,0.15)}
+        .offer-btn{width:100%;padding:16px;border-radius:16px;border:none;font-weight:700;font-size:15px;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Poppins',sans-serif}
+        .offer-btn.primary-btn{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;box-shadow:0 0 30px rgba(124,58,237,0.3)}
+        .offer-btn.outline-btn{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.2)}
+
+        /* TESTIMONIALS */
+        .testimonials-wrapper{overflow:hidden}
+        .testimonials-track{display:flex;gap:25px;animation:scrollT 30s linear infinite;width:max-content}
+        @keyframes scrollT{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+        .testimonial-card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:30px;min-width:350px;flex-shrink:0}
+        .testimonial-card .stars{color:var(--neon-orange);font-size:14px;margin-bottom:15px}
+        .testimonial-card blockquote{color:rgba(255,255,255,0.7);font-size:14px;line-height:1.7;margin-bottom:20px;font-style:italic}
+        .testimonial-author{display:flex;align-items:center;gap:12px}
+        .author-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff}
+        .author-info h4{font-size:14px;font-weight:600}.author-info span{font-size:12px;color:rgba(255,255,255,0.4)}
+
+        /* NEWSLETTER */
+        .newsletter-section{max-width:700px;margin:0 auto;text-align:center;background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(236,72,153,0.05));border:1px solid rgba(124,58,237,0.2);border-radius:30px;padding:60px 50px;position:relative;overflow:hidden}
+        .newsletter-section h2{font-family:'Orbitron',sans-serif;font-size:32px;margin-bottom:15px;position:relative}
+        .newsletter-section p{color:rgba(255,255,255,0.6);margin-bottom:30px;position:relative}
+        .newsletter-form{display:flex;gap:12px;position:relative}
+        .newsletter-form input{flex:1;padding:16px 24px;border-radius:50px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:#fff;font-size:14px;font-family:'Poppins',sans-serif;outline:none}
+        .newsletter-form input:focus{border-color:var(--primary);box-shadow:0 0 20px rgba(124,58,237,0.2)}
+        .newsletter-form input::placeholder{color:rgba(255,255,255,0.3)}
+        .newsletter-form button{padding:16px 30px;border-radius:50px;border:none;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .3s}
+        .newsletter-form button:hover{transform:translateY(-2px);box-shadow:0 5px 20px rgba(124,58,237,0.4)}
+
+        /* FOOTER */
+        .footer{padding:80px 50px 30px;border-top:1px solid rgba(255,255,255,0.06)}
+        .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:50px;max-width:1200px;margin:0 auto 50px}
+        .footer-brand p{color:rgba(255,255,255,0.4);font-size:14px;line-height:1.7;margin:20px 0}
+        .footer-social{display:flex;gap:12px}
+        .footer-social a{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);text-decoration:none;transition:all .3s}
+        .footer-social a:hover{background:var(--primary);border-color:var(--primary);color:#fff;transform:translateY(-3px)}
+        .footer-links h4{font-size:14px;text-transform:uppercase;letter-spacing:2px;margin-bottom:20px;color:rgba(255,255,255,0.8)}
+        .footer-links ul{list-style:none}.footer-links ul li{margin-bottom:10px}
+        .footer-links ul li a{color:rgba(255,255,255,0.4);text-decoration:none;font-size:14px;transition:all .3s}
+        .footer-links ul li a:hover{color:var(--primary)}
+        .footer-bottom{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding-top:30px;border-top:1px solid rgba(255,255,255,0.06)}
+        .footer-bottom p{font-size:13px;color:rgba(255,255,255,0.3)}
+
+        /* MISC */
+        .back-to-top{position:fixed;bottom:30px;right:30px;width:50px;height:50px;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:15px;display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-size:18px;opacity:0;visibility:hidden;transition:all .4s;z-index:999;box-shadow:0 5px 20px rgba(124,58,237,0.4)}
+        .back-to-top.visible{opacity:1;visibility:visible}
+        .cursor-glow{position:fixed;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.08) 0%,transparent 70%);pointer-events:none;z-index:0}
+        .reveal{opacity:0;transform:translateY(40px);transition:all .8s}.reveal.active{opacity:1;transform:translateY(0)}
+        .loader{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--darker);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:opacity .5s,visibility .5s}
+        .loader.hidden{opacity:0;visibility:hidden}
+        .loader-logo{font-family:'Orbitron',sans-serif;font-size:30px;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--secondary),var(--accent));background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradientFlow 2s ease infinite}
+        .loader-bar{width:200px;height:3px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden}
+        .loader-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));animation:loadBar 1.5s ease-in-out}
+        @keyframes loadBar{0%{width:0}100%{width:100%}}
+        .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;padding:15px 30px;border-radius:15px;font-size:14px;font-weight:600;z-index:100000;transition:transform .4s;display:flex;align-items:center;gap:10px;box-shadow:0 10px 40px rgba(124,58,237,0.4)}
+        .toast.show{transform:translateX(-50%) translateY(0)}
+        .marquee-wrap{overflow:hidden;padding:30px 0;position:relative}
+        .marquee-wrap::before,.marquee-wrap::after{content:'';position:absolute;top:0;width:100px;height:100%;z-index:2}
+        .marquee-wrap::before{left:0;background:linear-gradient(to right,var(--darker),transparent)}
+        .marquee-wrap::after{right:0;background:linear-gradient(to left,var(--darker),transparent)}
+        .tools-track{display:flex;gap:50px;animation:marquee 25s linear infinite;width:max-content}
+        .tool-item{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:600;color:rgba(255,255,255,0.15);white-space:nowrap;display:flex;align-items:center;gap:10px}
+        .tool-item .tdot{width:6px;height:6px;background:rgba(124,58,237,0.4);border-radius:50%}
+        @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+        /* ADMIN BUTTON */
+        .admin-float{position:fixed;bottom:100px;left:30px;padding:12px 20px;background:linear-gradient(135deg,rgba(124,58,237,0.3),rgba(236,72,153,0.2));border:1px solid rgba(124,58,237,0.4);border-radius:50px;display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.7);font-size:13px;font-weight:600;font-family:'Poppins',sans-serif;z-index:998;cursor:pointer;transition:all .3s;backdrop-filter:blur(10px)}
+        .admin-float:hover{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;box-shadow:0 5px 25px rgba(124,58,237,0.5)}
+
+        /* ADMIN OVERLAY */
+        .admin-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(15px);z-index:10001;display:none;align-items:center;justify-content:center}
+        .admin-overlay.active{display:flex}
+        .admin-login-box{background:linear-gradient(135deg,rgba(15,10,26,0.98),rgba(26,10,46,0.98));border:1px solid rgba(124,58,237,0.3);border-radius:24px;padding:50px 40px;max-width:420px;width:90%;text-align:center;position:relative}
+        .admin-login-box h2{font-family:'Orbitron',sans-serif;font-size:24px;margin-bottom:8px}
+        .admin-login-box>p{color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:25px}
+        .close-x{position:absolute;top:15px;right:20px;background:none;border:none;color:rgba(255,255,255,0.4);font-size:20px;cursor:pointer}
+        .a-input{margin-bottom:15px;text-align:left}
+        .a-input label{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.5);margin-bottom:8px;display:block}
+        .a-input input,.a-input textarea,.a-input select{width:100%;padding:14px 18px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#fff;font-size:14px;font-family:'Poppins',sans-serif;outline:none;transition:all .3s}
+        .a-input input:focus,.a-input textarea:focus,.a-input select:focus{border-color:var(--primary);box-shadow:0 0 15px rgba(124,58,237,0.2)}
+        .a-input select option{background:#1a0a2e}
+        .a-input textarea{min-height:100px;resize:vertical}
+        .a-btn{width:100%;padding:16px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-weight:700;font-size:15px;cursor:pointer;transition:all .3s;font-family:'Poppins',sans-serif;margin-top:10px}
+        .a-btn:hover{box-shadow:0 0 30px rgba(124,58,237,0.5);transform:translateY(-2px)}
+        .a-error{color:#ef4444;font-size:13px;margin-top:10px;display:none;padding:8px;background:rgba(239,68,68,0.1);border-radius:8px}
+        .cred-hint{background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:12px;padding:12px;margin-bottom:20px;text-align:left;font-size:12px;color:rgba(255,255,255,0.5)}
+
+        /* ADMIN DASHBOARD */
+        .admin-dash{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#0f0a1a,#1a0a2e);z-index:10002;display:none;overflow:hidden}
+        .admin-dash.active{display:flex}
+        .a-sidebar{width:260px;background:rgba(0,0,0,0.3);border-right:1px solid rgba(255,255,255,0.06);padding:25px 0;display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0}
+        .a-sidebar-hdr{padding:0 25px 25px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:15px}
+        .a-sidebar-hdr h3{font-family:'Orbitron',sans-serif;font-size:16px;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .a-sidebar-hdr p{font-size:11px;color:rgba(255,255,255,0.3);margin-top:5px}
+        .a-nav{flex:1;padding:0 15px}
+        .a-nav-item{display:flex;align-items:center;gap:12px;padding:12px 15px;border-radius:12px;color:rgba(255,255,255,0.5);cursor:pointer;transition:all .3s;font-size:14px;margin-bottom:4px}
+        .a-nav-item:hover,.a-nav-item.active{background:rgba(124,58,237,0.15);color:#fff}
+        .a-nav-item.active{border-left:3px solid var(--primary)}
+        .a-nav-item i{width:20px;text-align:center}
+        .a-nav-div{height:1px;background:rgba(255,255,255,0.06);margin:15px}
+        .a-logout{margin:15px;padding:12px;border-radius:12px;border:1px solid rgba(239,68,68,0.3);background:rgba(239,68,68,0.1);color:#ef4444;text-align:center;cursor:pointer;font-weight:600;font-size:14px;font-family:'Poppins',sans-serif}
+        .a-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+        .a-topbar{padding:20px 30px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+        .a-topbar h2{font-family:'Orbitron',sans-serif;font-size:20px}
+        .a-content{flex:1;padding:30px;overflow-y:auto}
+        .a-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;margin-bottom:30px}
+        .a-stat{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:25px;text-align:center}
+        .a-stat .si{width:50px;height:50px;border-radius:14px;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;font-size:20px}
+        .a-stat h4{font-family:'Orbitron',sans-serif;font-size:24px;margin-bottom:5px}
+        .a-stat p{font-size:12px;color:rgba(255,255,255,0.4)}
+        .a-list{display:flex;flex-direction:column;gap:12px}
+        .a-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:20px 25px;display:flex;justify-content:space-between;align-items:center;transition:all .3s}
+        .a-item:hover{border-color:rgba(124,58,237,0.2)}
+        .a-item-info{flex:1;min-width:0}
+        .a-item-info h4{font-size:15px;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .a-item-info p{font-size:12px;color:rgba(255,255,255,0.4)}
+        .a-badge{display:inline-block;padding:2px 10px;border-radius:50px;font-size:10px;font-weight:600;margin-top:5px;text-transform:uppercase}
+        .a-item-btns{display:flex;gap:8px;flex-shrink:0;margin-left:15px}
+        .a-ibtn{width:36px;height:36px;border-radius:10px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .3s}
+        .a-ibtn.edit{background:rgba(59,130,246,0.15);color:#60a5fa}
+        .a-ibtn.edit:hover{background:rgba(59,130,246,0.3)}
+        .a-ibtn.del{background:rgba(239,68,68,0.15);color:#f87171}
+        .a-ibtn.del:hover{background:rgba(239,68,68,0.3)}
+        .a-ibtn.dl{background:rgba(16,185,129,0.15);color:#34d399}
+        .a-ibtn.dl:hover{background:rgba(16,185,129,0.3)}
+        .a-tab{display:none}.a-tab.active{display:block}
+        .a-empty{text-align:center;padding:60px 20px;color:rgba(255,255,255,0.3)}
+        .a-empty i{font-size:50px;margin-bottom:15px;display:block}
+
+        /* MODAL */
+        .a-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);backdrop-filter:blur(5px);z-index:10003;display:none;align-items:center;justify-content:center}
+        .a-modal.active{display:flex}
+        .a-modal-box{background:linear-gradient(135deg,#0f0a1a,#1a0a2e);border:1px solid rgba(124,58,237,0.3);border-radius:24px;padding:40px;max-width:550px;width:90%;max-height:85vh;overflow-y:auto;position:relative}
+        .a-modal-box h3{font-family:'Orbitron',sans-serif;font-size:20px;margin-bottom:5px}
+        .a-modal-box>p{color:rgba(255,255,255,0.4);font-size:13px;margin-bottom:25px}
+        .a-modal-close{position:absolute;top:15px;right:20px;background:none;border:none;color:rgba(255,255,255,0.4);font-size:20px;cursor:pointer}
+        .a-row{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+        .file-area{border:2px dashed rgba(124,58,237,0.3);border-radius:14px;padding:30px;text-align:center;cursor:pointer;transition:all .3s;margin-top:5px}
+        .file-area:hover{border-color:var(--primary);background:rgba(124,58,237,0.05)}
+        .file-area i{font-size:30px;color:rgba(124,58,237,0.5);margin-bottom:10px;display:block}
+        .file-area p{font-size:12px;color:rgba(255,255,255,0.4)}
+        .file-area .fname{color:var(--neon-green);font-size:13px;margin-top:8px;font-weight:600}
+        .file-area input[type="file"]{display:none}
+        .a-form-btns{display:flex;gap:12px;margin-top:25px}
+        .a-form-btns button{flex:1;padding:14px;border-radius:14px;border:none;font-weight:700;font-size:14px;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .3s}
+        .a-form-btns .save{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff}
+        .a-form-btns .save:hover{box-shadow:0 0 25px rgba(124,58,237,0.4)}
+        .a-form-btns .cancel{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.1)}
+        .colors{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+        .copt{width:36px;height:36px;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:all .3s}
+        .copt:hover,.copt.sel{border-color:#fff;transform:scale(1.1)}
+        .tog{display:flex;align-items:center;gap:12px;margin-top:8px}
+        .tog input[type="checkbox"]{display:none}
+        .tog-s{width:50px;height:26px;background:rgba(255,255,255,0.1);border-radius:13px;position:relative;cursor:pointer;transition:background .3s}
+        .tog-s::after{content:'';position:absolute;width:20px;height:20px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .3s}
+        .tog input:checked+.tog-s{background:var(--primary)}
+        .tog input:checked+.tog-s::after{transform:translateX(24px)}
+
+        /* STATUS BANNER */
+        .status-banner{position:fixed;top:0;left:0;right:0;background:linear-gradient(90deg,var(--primary),var(--secondary));text-align:center;padding:8px;font-size:12px;font-weight:600;z-index:9998;display:none}
+        .status-banner.show{display:block}
+        .status-banner a{color:#fff;text-decoration:underline}
+
+        /* RESPONSIVE */
+        @media(max-width:1024px){.hero h1{font-size:45px}.section-title{font-size:34px}.footer-grid{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:768px){
+            .navbar{padding:15px 25px}
+            .nav-links{position:fixed;top:0;right:-100%;width:80%;height:100vh;background:rgba(15,10,26,0.98);backdrop-filter:blur(20px);flex-direction:column;justify-content:center;padding:50px;transition:right .4s;border-left:1px solid rgba(124,58,237,0.2)}
+            .nav-links.active{right:0}.hamburger{display:flex}
+            .hero{padding:120px 25px 80px}.hero h1{font-size:32px}.hero p{font-size:15px}
+            .hero-stats{gap:25px;flex-wrap:wrap}.stat-number{font-size:24px}
+            section{padding:70px 25px}.section-title{font-size:28px}
+            .newsletter-section{padding:40px 25px}.newsletter-form{flex-direction:column}
+            .footer-grid{grid-template-columns:1fr;gap:30px}
+            .footer-bottom{flex-direction:column;gap:15px;text-align:center}
+            .hero-buttons{flex-direction:column;align-items:center}
+            .offers-grid,.products-grid{grid-template-columns:1fr}
+            .a-sidebar{width:220px;position:absolute;left:-220px;z-index:10;transition:left .3s;height:100%}
+            .a-sidebar.mopen{left:0}
+            .mob-tog{display:inline-block!important}
+            .a-row{grid-template-columns:1fr}
+        }
+        @media(max-width:480px){.hero h1{font-size:26px}.features-grid,.web3-grid{grid-template-columns:1fr}}
+        .mob-tog{display:none;background:none;border:none;color:#fff;font-size:20px;cursor:pointer;margin-right:10px}
+    </style>
+</head>
+<body>
+
+<div class="loader" id="loader"><div class="loader-logo">NupurAIArts</div><div class="loader-bar"><div class="loader-bar-fill"></div></div></div>
+
+<!-- Status Banner -->
+<div class="status-banner" id="statusBanner">
+    🔥 <span id="bannerText">Setup Firebase for permanent storage!</span>
+    <a href="#" onclick="showSetupGuide();return false;">Setup Guide</a>
+</div>
+
+<div class="bg-animation"></div>
+<div class="floating-orbs"><div class="orb"></div><div class="orb"></div><div class="orb"></div><div class="orb"></div></div>
+<div class="particles" id="particles"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- MAIN SITE -->
+<nav class="navbar" id="navbar">
+    <a href="#" class="logo"><div class="logo-icon">N</div><span class="logo-text">NupurAIArts</span></a>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="#home" onclick="closeMenu()">Home</a></li>
+        <li><a href="#features" onclick="closeMenu()">Features</a></li>
+        <li><a href="#products" onclick="closeMenu()">Products</a></li>
+        <li><a href="#tutorials" onclick="closeMenu()">Tutorials</a></li>
+        <li><a href="#prompts" onclick="closeMenu()">Prompts</a></li>
+        <li><a href="#web3" onclick="closeMenu()">Web3</a></li>
+        <li><a href="#offers" onclick="closeMenu()" class="nav-cta">Get Access</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+
+<section class="hero" id="home">
+    <div class="hero-content">
+        <div class="hero-badge"><span class="dot"></span> New AI Art Secrets Just Dropped</div>
+        <h1>Unlock The Power Of<br><span class="gradient-text">AI Art Creation</span></h1>
+        <p>Master AI art generation with secret prompts, step-by-step tutorials, Web3 insights, and exclusive resources.</p>
+        <div class="hero-buttons">
+            <a href="#tutorials" class="btn-primary"><i class="fas fa-play"></i> Start Learning</a>
+            <a href="#prompts" class="btn-secondary"><i class="fas fa-key"></i> Secret Prompts</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat"><div class="stat-number" data-target="500">0</div><div class="stat-label">AI Prompts</div></div>
+            <div class="stat"><div class="stat-number" data-target="120">0</div><div class="stat-label">Tutorials</div></div>
+            <div class="stat"><div class="stat-number" data-target="25">0</div><div class="stat-label">Web3 Guides</div></div>
+            <div class="stat"><div class="stat-number" data-target="10">0</div><div class="stat-label">K+ Community</div></div>
+        </div>
+    </div>
+    <div class="scroll-indicator"><div class="scroll-mouse"></div><span>Scroll Down</span></div>
+</section>
+
+<div class="marquee-wrap"><div class="tools-track">
+    <div class="tool-item"><span class="tdot"></span> Midjourney</div><div class="tool-item"><span class="tdot"></span> DALL·E 3</div><div class="tool-item"><span class="tdot"></span> Stable Diffusion</div><div class="tool-item"><span class="tdot"></span> Leonardo AI</div><div class="tool-item"><span class="tdot"></span> ComfyUI</div><div class="tool-item"><span class="tdot"></span> RunwayML</div><div class="tool-item"><span class="tdot"></span> Adobe Firefly</div><div class="tool-item"><span class="tdot"></span> Flux AI</div>
+    <div class="tool-item"><span class="tdot"></span> Midjourney</div><div class="tool-item"><span class="tdot"></span> DALL·E 3</div><div class="tool-item"><span class="tdot"></span> Stable Diffusion</div><div class="tool-item"><span class="tdot"></span> Leonardo AI</div><div class="tool-item"><span class="tdot"></span> ComfyUI</div><div class="tool-item"><span class="tdot"></span> RunwayML</div><div class="tool-item"><span class="tdot"></span> Adobe Firefly</div><div class="tool-item"><span class="tdot"></span> Flux AI</div>
+</div></div>
+
+<section id="features">
+    <div class="section-header reveal"><div class="section-tag"><i class="fas fa-diamond"></i> What We Offer</div><h2 class="section-title">Everything You Need to Master AI Art</h2></div>
+    <div class="features-grid">
+        <div class="feature-card reveal"><div class="feature-icon"><i class="fas fa-wand-magic-sparkles"></i></div><h3>AI Art Tutorials</h3><p>Step-by-step guides for all AI art platforms.</p><span class="feature-tag">120+ Tutorials</span></div>
+        <div class="feature-card reveal"><div class="feature-icon"><i class="fas fa-key"></i></div><h3>Secret Prompts</h3><p>High-performing prompts for stunning results.</p><span class="feature-tag">500+ Prompts</span></div>
+        <div class="feature-card reveal"><div class="feature-icon"><i class="fas fa-cube"></i></div><h3>Web3 & NFT Guides</h3><p>Blockchain art, NFTs, and monetization.</p><span class="feature-tag">25+ Guides</span></div>
+        <div class="feature-card reveal"><div class="feature-icon"><i class="fas fa-gift"></i></div><h3>Special Offers</h3><p>Exclusive bundles at discounted rates.</p><span class="feature-tag">Limited Deals</span></div>
+    </div>
+</section>
+<div class="section-divider"></div>
+
+<section id="products">
+    <div class="section-header reveal"><div class="section-tag"><i class="fas fa-store"></i> Digital Products</div><h2 class="section-title">Premium Resources & Products</h2></div>
+    <div class="products-grid" id="productsGrid"></div>
+</section>
+<div class="section-divider"></div>
+
+<section id="tutorials">
+    <div class="section-header reveal"><div class="section-tag"><i class="fas fa-graduation-cap"></i> Learn & Create</div><h2 class="section-title">Featured Tutorials</h2></div>
+    <div class="products-grid" id="tutorialsGrid"></div>
+</section>
+<div class="section-divider"></div>
+
+<section id="prompts">
+    <div class="section-header reveal"><div class="section-tag"><i class="fas fa-lock"></i> Secret Vault</div><h2 class="section-title">AI Prompt Secrets</h2></div>
+    <div class="prompts-container" id="promptsGrid"></div>
+</section>
+<div class="section-divider"></div>
+
+<section id="web3">
+    <div class="section-header reveal"><div class="section-tag"><i class="fas fa-cube"></i> Web3</div><h2 class="section-title">Your Gateway to Web3 & NFTs</h2></div>
+    <div class="web3-grid">
+        <div class="web3-card reveal"><div class="web3-icon"><i class="fas fa-image"></i></div><h3>NFT Creation</h3><p>Mint and list your AI art.</p><a href="#" class="learn-more">Learn More <i class="fas fa-arrow-right"></i></a></div>
+        <div class="web3-card reveal"><div class="web3-icon"><i class="fas fa-wallet"></i></div><h3>Crypto Wallets</h3><p>Setup digital wallets.</p><a href="#" class="learn-more">Learn More <i class="fas fa-arrow-right"></i></a></div>
+        <div class="web3-card reveal"><div class="web3-icon"><i class="fas fa-link"></i></div><h3>Blockchain</h3><p>Understand the tech.</p><a href="#" class="learn-more">Learn More <i class="fas fa-arrow-right"></i></a></div>
+        <div class="web3-card reveal"><div class="web3-icon"><i class="fas fa-coins"></i></div><h3>Monetization</h3><p>Earn from your AI art.</p><a href="#" class="learn-more">Learn More <i class="fas fa-arrow-right"></i></a></div>
+    </div>
+</section>
+<div class="section-divider"></div>
+
+<section id="offers">
+    <div class="section-header reveal"><div class="section-tag"><i class="fas fa-fire"></i> Special Offers</div><h2 class="section-title">Choose Your Plan</h2></div>
+    <div class="offers-grid">
+        <div class="offer-card reveal"><h3>Starter</h3><p class="offer-subtitle">For beginners</p><div class="offer-price"><span class="amount">Free</span></div><ul class="offer-features"><li><i class="fas fa-check"></i> 10 Free Prompts</li><li><i class="fas fa-check"></i> 5 Tutorials</li><li class="disabled"><i class="fas fa-xmark"></i> Premium Content</li></ul><button class="offer-btn outline-btn">Get Started</button></div>
+        <div class="offer-card featured reveal"><div class="offer-ribbon">Popular</div><h3>Pro Creator</h3><p class="offer-subtitle">For serious artists</p><div class="offer-price"><span class="amount">$29</span><span class="original">$79</span><span class="period">/mo</span></div><ul class="offer-features"><li><i class="fas fa-check"></i> All 500+ Prompts</li><li><i class="fas fa-check"></i> All Tutorials</li><li><i class="fas fa-check"></i> Web3 Guides</li><li><i class="fas fa-check"></i> Priority Support</li></ul><button class="offer-btn primary-btn">Get Pro <i class="fas fa-crown"></i></button></div>
+        <div class="offer-card reveal"><h3>Elite</h3><p class="offer-subtitle">Ultimate mastery</p><div class="offer-price"><span class="amount">$99</span><span class="original">$249</span><span class="period">/mo</span></div><ul class="offer-features"><li><i class="fas fa-check"></i> Everything in Pro</li><li><i class="fas fa-check"></i> 1-on-1 Mentoring</li><li><i class="fas fa-check"></i> Lifetime Updates</li></ul><button class="offer-btn outline-btn">Go Elite <i class="fas fa-rocket"></i></button></div>
+    </div>
+</section>
+<div class="section-divider"></div>
+
+<section><div class="section-header reveal"><div class="section-tag"><i class="fas fa-heart"></i> Love</div><h2 class="section-title">What Creators Say</h2></div>
+<div class="testimonials-wrapper"><div class="testimonials-track">
+    <div class="testimonial-card"><div class="stars">★★★★★</div><blockquote>"Completely transformed my AI art!"</blockquote><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#7c3aed,#ec4899)">AK</div><div class="author-info"><h4>Arjun K.</h4><span>AI Artist</span></div></div></div>
+    <div class="testimonial-card"><div class="stars">★★★★★</div><blockquote>"Sold my first NFT collection!"</blockquote><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#06b6d4,#10b981)">SM</div><div class="author-info"><h4>Sarah M.</h4><span>Creator</span></div></div></div>
+    <div class="testimonial-card"><div class="stars">★★★★★</div><blockquote>"Best AI art resource. Period."</blockquote><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">RD</div><div class="author-info"><h4>Rahul D.</h4><span>Designer</span></div></div></div>
+    <div class="testimonial-card"><div class="stars">★★★★★</div><blockquote>"Consistently stunning results!"</blockquote><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)">LP</div><div class="author-info"><h4>Lisa P.</h4><span>Director</span></div></div></div>
+    <div class="testimonial-card"><div class="stars">★★★★★</div><blockquote>"Completely transformed my AI art!"</blockquote><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#7c3aed,#ec4899)">AK</div><div class="author-info"><h4>Arjun K.</h4><span>AI Artist</span></div></div></div>
+    <div class="testimonial-card"><div class="stars">★★★★★</div><blockquote>"Best AI art resource. Period."</blockquote><div class="testimonial-author"><div class="author-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">RD</div><div class="author-info"><h4>Rahul D.</h4><span>Designer</span></div></div></div>
+</div></div></section>
+<div class="section-divider"></div>
+
+<section><div class="newsletter-section reveal"><h2>Join the AI Art Revolution</h2><p>Weekly prompts & tips in your inbox.</p><form class="newsletter-form" onsubmit="handleSub(event)"><input type="email" placeholder="Your email" required id="emailInput"><button type="submit"><i class="fas fa-paper-plane"></i> Subscribe</button></form></div></section>
+
+<footer class="footer">
+    <div class="footer-grid">
+        <div class="footer-brand"><a href="#" class="logo"><div class="logo-icon">N</div><span class="logo-text">NupurAIArts</span></a><p>Empowering creators to master AI art and Web3.</p><div class="footer-social"><a href="#"><i class="fab fa-x-twitter"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-youtube"></i></a><a href="#"><i class="fab fa-discord"></i></a></div></div>
+        <div class="footer-links"><h4>Learn</h4><ul><li><a href="#tutorials">Tutorials</a></li><li><a href="#prompts">Prompts</a></li><li><a href="#web3">Web3</a></li></ul></div>
+        <div class="footer-links"><h4>Resources</h4><ul><li><a href="#">Tools</a></li><li><a href="#">Community</a></li><li><a href="#">FAQ</a></li></ul></div>
+        <div class="footer-links"><h4>Connect</h4><ul><li><a href="#">About</a></li><li><a href="#">Contact</a></li><li><a href="#">Support</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 NupurAIArts. All rights reserved.</p></div>
+</footer>
+
+<a href="#home" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
+<div class="toast" id="toast"></div>
+
+<!-- ADMIN BUTTON -->
+<div class="admin-float" onclick="showLogin()"><i class="fas fa-shield-halved"></i> Admin</div>
+
+<!-- LOGIN -->
+<div class="admin-overlay" id="loginOverlay">
+    <div class="admin-login-box">
+        <button class="close-x" onclick="hideLogin()"><i class="fas fa-times"></i></button>
+        <div style="width:70px;height:70px;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px"><i class="fas fa-shield-halved"></i></div>
+        <h2>Admin Access</h2>
+        <p>Only the owner can access this panel</p>
+        <div class="cred-hint"><strong style="color:#c4b5fd">📋 Default:</strong><br>User: <code style="color:var(--neon-green)">nupur</code> | Pass: <code style="color:var(--neon-green)">nupur2025</code></div>
+        <form onsubmit="doLogin(event)">
+            <div class="a-input"><label>Username</label><input type="text" id="aUser" autocomplete="off"></div>
+            <div class="a-input"><label>Password</label><input type="password" id="aPass"></div>
+            <div class="a-error" id="aErr"><i class="fas fa-exclamation-circle"></i> Wrong credentials</div>
+            <button type="submit" class="a-btn"><i class="fas fa-arrow-right-to-bracket"></i> Login</button>
+        </form>
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="admin-dash" id="dashboard">
+    <div class="a-sidebar" id="sidebar">
+        <div class="a-sidebar-hdr"><h3>🎨 NupurAIArts</h3><p>Admin Dashboard</p></div>
+        <div class="a-nav">
+            <div class="a-nav-item active" onclick="goTab('dash',this)"><i class="fas fa-chart-pie"></i> Dashboard</div>
+            <div class="a-nav-item" onclick="goTab('prod',this)"><i class="fas fa-store"></i> Products</div>
+            <div class="a-nav-item" onclick="goTab('tut',this)"><i class="fas fa-graduation-cap"></i> Tutorials</div>
+            <div class="a-nav-item" onclick="goTab('prm',this)"><i class="fas fa-key"></i> Prompts</div>
+            <div class="a-nav-div"></div>
+            <div class="a-nav-item" onclick="goTab('fil',this)"><i class="fas fa-file-pdf"></i> Files</div>
+            <div class="a-nav-item" onclick="goTab('subs',this)"><i class="fas fa-envelope"></i> Subscribers</div>
+            <div class="a-nav-item" onclick="goTab('set',this)"><i class="fas fa-gear"></i> Settings</div>
+        </div>
+        <button class="a-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+    <div class="a-main">
+        <div class="a-topbar">
+            <div style="display:flex;align-items:center"><button class="mob-tog" onclick="document.getElementById('sidebar').classList.toggle('mopen')"><i class="fas fa-bars"></i></button><h2 id="pageTitle">Dashboard</h2></div>
+            <button class="btn-primary" style="padding:10px 20px;font-size:13px" id="addBtn" onclick="openAdd()"><i class="fas fa-plus"></i> Add New</button>
+        </div>
+        <div class="a-content">
+            <div class="a-tab active" id="dash">
+                <div class="a-stats">
+                    <div class="a-stat"><div class="si" style="background:rgba(124,58,237,0.15);color:#a78bfa"><i class="fas fa-store"></i></div><h4 id="sP">0</h4><p>Products</p></div>
+                    <div class="a-stat"><div class="si" style="background:rgba(236,72,153,0.15);color:#f472b6"><i class="fas fa-graduation-cap"></i></div><h4 id="sT">0</h4><p>Tutorials</p></div>
+                    <div class="a-stat"><div class="si" style="background:rgba(6,182,212,0.15);color:#22d3ee"><i class="fas fa-key"></i></div><h4 id="sPr">0</h4><p>Prompts</p></div>
+                    <div class="a-stat"><div class="si" style="background:rgba(16,185,129,0.15);color:#34d399"><i class="fas fa-envelope"></i></div><h4 id="sE">0</h4><p>Subscribers</p></div>
+                </div>
+                <h3 style="margin-bottom:15px;color:rgba(255,255,255,0.6)">📋 Recent</h3>
+                <div class="a-list" id="recent"></div>
+            </div>
+            <div class="a-tab" id="prod"><div class="a-list" id="prodList"></div></div>
+            <div class="a-tab" id="tut"><div class="a-list" id="tutList"></div></div>
+            <div class="a-tab" id="prm"><div class="a-list" id="prmList"></div></div>
+            <div class="a-tab" id="fil"><div class="a-list" id="filList"></div></div>
+            <div class="a-tab" id="subs"><div class="a-list" id="subsList"></div></div>
+            <div class="a-tab" id="set">
+                <div style="max-width:500px">
+                    <h3 style="margin-bottom:20px">🔑 Change Password</h3>
+                    <div class="a-input"><label>Current Password</label><input type="password" id="curP"></div>
+                    <div class="a-input"><label>New Password</label><input type="password" id="newP"></div>
+                    <div class="a-input"><label>Confirm</label><input type="password" id="conP"></div>
+                    <button class="a-btn" onclick="chgPass()" style="max-width:220px;margin-top:10px"><i class="fas fa-save"></i> Update</button>
+                    <hr style="border-color:rgba(255,255,255,0.06);margin:30px 0">
+                    <h3 style="margin-bottom:20px">👤 Username</h3>
+                    <div class="a-input"><label>New Username</label><input type="text" id="newU"></div>
+                    <button class="a-btn" onclick="chgUser()" style="max-width:220px;margin-top:10px"><i class="fas fa-save"></i> Update</button>
+                    <hr style="border-color:rgba(255,255,255,0.06);margin:30px 0">
+                    <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:16px;padding:25px;margin-bottom:30px">
+                        <h3 style="color:var(--neon-green);margin-bottom:10px">☁️ Storage Status</h3>
+                        <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:10px" id="storageStatus">Checking...</p>
+                        <p style="font-size:12px;color:rgba(255,255,255,0.4)" id="storageUsed"></p>
+                    </div>
+                    <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:16px;padding:20px">
+                        <h3 style="color:#ef4444;margin-bottom:10px">⚠️ Danger Zone</h3>
+                        <button class="a-logout" onclick="if(confirm('DELETE ALL?')){DB.clear();location.reload()}" style="max-width:250px"><i class="fas fa-trash"></i> Reset All</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL -->
+<div class="a-modal" id="modal">
+    <div class="a-modal-box">
+        <button class="a-modal-close" onclick="closeM()"><i class="fas fa-times"></i></button>
+        <h3 id="mTitle">Add New</h3>
+        <p>Fill in details</p>
+        <form onsubmit="saveI(event)" id="mForm">
+            <input type="hidden" id="eId"><input type="hidden" id="eKey">
+            <div class="a-input"><label>Type</label><select id="iType" onchange="togFields()"><option value="product">Product</option><option value="tutorial">Tutorial</option><option value="prompt">Prompt</option><option value="file">File/PDF</option></select></div>
+            <div class="a-input"><label>Title *</label><input type="text" id="iTitle" required></div>
+            <div class="a-input"><label>Description</label><textarea id="iDesc"></textarea></div>
+            <div class="a-row" id="priceR"><div class="a-input"><label>Price</label><input type="text" id="iPrice" placeholder="Free or 19.99"></div><div class="a-input"><label>Original Price</label><input type="text" id="iOrig"></div></div>
+            <div class="a-row" id="catR"><div class="a-input"><label>Category</label><select id="iCat"><option value="pdf">PDF</option><option value="video">Video</option><option value="bundle">Bundle</option><option value="template">Template</option><option value="course">Course</option><option value="ebook">E-Book</option></select></div><div class="a-input"><label>Status</label><select id="iStat"><option value="active">Active</option><option value="draft">Draft</option><option value="featured">Featured</option></select></div></div>
+            <div id="prmF" style="display:none">
+                <div class="a-input"><label>Platform</label><select id="pPlat"><option>Midjourney v6</option><option>DALL·E 3</option><option>Stable Diffusion XL</option><option>Leonardo AI</option><option>Flux AI</option></select></div>
+                <div class="a-input"><label>Prompt Text</label><textarea id="pText"></textarea></div>
+                <div class="a-input"><label>Access</label><div class="tog"><span style="font-size:13px;color:rgba(255,255,255,0.5)">Free</span><input type="checkbox" id="pPrem"><label class="tog-s" for="pPrem"></label><span style="font-size:13px;color:rgba(255,255,255,0.5)">Premium</span></div></div>
+            </div>
+            <div id="tutF" style="display:none">
+                <div class="a-row"><div class="a-input"><label>Duration</label><input type="text" id="tDur" placeholder="2h 30min"></div><div class="a-input"><label>Badge</label><select id="tBadge"><option value="free">Free</option><option value="premium">Premium</option><option value="new">New</option></select></div></div>
+                <div class="a-input"><label>Video Link</label><input type="url" id="tLink" placeholder="https://..."></div>
+            </div>
+            <div class="a-input" id="fileG"><label>Upload File</label><div class="file-area" onclick="document.getElementById('fIn').click()"><i class="fas fa-cloud-arrow-up"></i><p>Click to upload (max ~4MB local)</p><div class="fname" id="fName"></div><input type="file" id="fIn" onchange="handleFile(event)"></div></div>
+            <div class="a-input"><label>External Link</label><input type="url" id="extL" placeholder="https://drive.google.com/..."></div>
+            <div class="a-input"><label>Color</label><div class="colors" id="colOpts"><div class="copt sel" style="background:linear-gradient(135deg,#7c3aed,#2563eb)" data-c="linear-gradient(135deg,#7c3aed,#2563eb)"></div><div class="copt" style="background:linear-gradient(135deg,#ec4899,#f59e0b)" data-c="linear-gradient(135deg,#ec4899,#f59e0b)"></div><div class="copt" style="background:linear-gradient(135deg,#06b6d4,#10b981)" data-c="linear-gradient(135deg,#06b6d4,#10b981)"></div><div class="copt" style="background:linear-gradient(135deg,#f59e0b,#ef4444)" data-c="linear-gradient(135deg,#f59e0b,#ef4444)"></div><div class="copt" style="background:linear-gradient(135deg,#8b5cf6,#ec4899)" data-c="linear-gradient(135deg,#8b5cf6,#ec4899)"></div><div class="copt" style="background:linear-gradient(135deg,#10b981,#3b82f6)" data-c="linear-gradient(135deg,#10b981,#3b82f6)"></div></div></div>
+            <div class="a-form-btns"><button type="button" class="cancel" onclick="closeM()">Cancel</button><button type="submit" class="save"><i class="fas fa-save"></i> Save</button></div>
+        </form>
+    </div>
+</div>
+
+<!-- SETUP GUIDE MODAL -->
+<div class="a-modal" id="setupModal">
+    <div class="a-modal-box" style="max-width:650px">
+        <button class="a-modal-close" onclick="document.getElementById('setupModal').classList.remove('active')"><i class="fas fa-times"></i></button>
+        <h3>🚀 Make Your Site PERMANENT</h3>
+        <p>Follow these steps for long-term professional hosting:</p>
+        <div style="margin-top:20px">
+            <div style="background:rgba(124,58,237,0.1);border-radius:16px;padding:20px;margin-bottom:15px">
+                <h4 style="color:#c4b5fd;margin-bottom:8px">Step 1: Create Firebase Account (FREE)</h4>
+                <p style="font-size:13px;color:rgba(255,255,255,0.5)">Go to <a href="https://firebase.google.com" target="_blank" style="color:var(--accent)">firebase.google.com</a> → Sign in with Google → Create new project "NupurAIArts"</p>
+            </div>
+            <div style="background:rgba(236,72,153,0.1);border-radius:16px;padding:20px;margin-bottom:15px">
+                <h4 style="color:#f472b6;margin-bottom:8px">Step 2: Enable Firestore Database</h4>
+                <p style="font-size:13px;color:rgba(255,255,255,0.5)">In Firebase Console → Build → Firestore Database → Create → Start in test mode</p>
+            </div>
+            <div style="background:rgba(6,182,212,0.1);border-radius:16px;padding:20px;margin-bottom:15px">
+                <h4 style="color:#22d3ee;margin-bottom:8px">Step 3: Enable Storage</h4>
+                <p style="font-size:13px;color:rgba(255,255,255,0.5)">Build → Storage → Get Started (for unlimited file uploads)</p>
+            </div>
+            <div style="background:rgba(16,185,129,0.1);border-radius:16px;padding:20px;margin-bottom:15px">
+                <h4 style="color:#34d399;margin-bottom:8px">Step 4: Deploy FREE Hosting</h4>
+                <p style="font-size:13px;color:rgba(255,255,255,0.5)">Build → Hosting → Get Started → Follow steps → Your site gets a FREE URL like nupuraiarts.web.app</p>
+            </div>
+            <div style="background:rgba(245,158,11,0.1);border-radius:16px;padding:20px">
+                <h4 style="color:#fbbf24;margin-bottom:8px">Alternative: Use Netlify (Even Easier)</h4>
+                <p style="font-size:13px;color:rgba(255,255,255,0.5)">Go to <a href="https://netlify.com" target="_blank" style="color:var(--accent)">netlify.com</a> → Drag & drop your HTML file → Get instant FREE URL → Connect custom domain</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============ DATABASE LAYER ============
+// This abstraction layer works with localStorage NOW
+// but can be swapped to Firebase/Supabase later WITHOUT changing any other code
+const DB = {
+    get(key) { try { return JSON.parse(localStorage.getItem('nai_'+key)) || [] } catch(e) { return [] } },
+    set(key, data) { try { localStorage.setItem('nai_'+key, JSON.stringify(data)) } catch(e) { toast('Storage full! Use external links for files.') } },
+    getOne(key) { return localStorage.getItem('nai_'+key) },
+    setOne(key, val) { localStorage.setItem('nai_'+key, val) },
+    clear() { Object.keys(localStorage).filter(k=>k.startsWith('nai_')).forEach(k=>localStorage.removeItem(k)) },
+    getUsed() { let t=0; Object.keys(localStorage).filter(k=>k.startsWith('nai_')).forEach(k=>{t+=localStorage.getItem(k).length}); return (t/1024/1024).toFixed(2) }
+};
+
+function getCreds(){return{u:DB.getOne('user')||'nupur',p:DB.getOne('pass')||'nupur2025'}}
+let curTab='dash',selColor='linear-gradient(135deg,#7c3aed,#2563eb)',upFile=null;
+
+// ============ INIT ============
+window.addEventListener('load',()=>{
+    setTimeout(()=>document.getElementById('loader').classList.add('hidden'),1500);
+    renderFront();
+    checkStorage();
+});
+
+function checkStorage(){
+    const used=DB.getUsed();
+    const el=document.getElementById('storageStatus');
+    const el2=document.getElementById('storageUsed');
+    if(el){el.textContent='📦 Using localStorage (browser-based)';el2.textContent=`Storage used: ${used} MB / ~5 MB`}
+}
+
+// ============ PARTICLES ============
+const pc=document.getElementById('particles');
+for(let i=0;i<40;i++){const p=document.createElement('div');p.classList.add('particle');p.style.left=Math.random()*100+'%';p.style.top=Math.random()*100+'%';p.style.animationDelay=Math.random()*3+'s';p.style.animationDuration=(Math.random()*3+2)+'s';pc.appendChild(p)}
+
+// ============ CURSOR ============
+document.addEventListener('mousemove',e=>{const g=document.getElementById('cursorGlow');g.style.left=e.clientX-150+'px';g.style.top=e.clientY-150+'px'});
+
+// ============ SCROLL ============
+window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',scrollY>50);document.getElementById('backToTop').classList.toggle('visible',scrollY>500)});
+
+// ============ MENU ============
+function toggleMenu(){document.getElementById('navLinks').classList.toggle('active');document.getElementById('hamburger').classList.toggle('active')}
+function closeMenu(){document.getElementById('navLinks').classList.remove('active');document.getElementById('hamburger').classList.remove('active')}
+
+// ============ REVEAL ============
+document.querySelectorAll('.reveal').forEach(el=>{new IntersectionObserver(ent=>{ent.forEach(e=>{if(e.isIntersecting)e.target.classList.add('active')})},{threshold:0.1}).observe(el)});
+
+// ============ COUNTER ============
+document.querySelectorAll('.stat-number').forEach(c=>{new IntersectionObserver(ent=>{ent.forEach(e=>{if(e.isIntersecting){const t=+e.target.dataset.target;let n=0;const s=Math.ceil(t/50);const tm=setInterval(()=>{n+=s;if(n>=t){n=t;clearInterval(tm)}e.target.textContent=n+'+'},30);e.target._done=1}})},{threshold:0.5}).observe(c)});
+
+// ============ SMOOTH SCROLL ============
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',function(e){e.preventDefault();const t=document.querySelector(this.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})}));
+
+// ============ TOAST ============
+function toast(m){const t=document.getElementById('toast');t.innerHTML='<i class="fas fa-check-circle"></i> '+m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+
+// ============ NEWSLETTER (ACTUALLY SAVES!) ============
+function handleSub(e){
+    e.preventDefault();
+    const email=document.getElementById('emailInput').value;
+    if(!email)return;
+    const subs=DB.get('subscribers');
+    if(subs.find(s=>s.email===email)){toast('Already subscribed! 💜');return}
+    subs.push({email,date:Date.now()});
+    DB.set('subscribers',subs);
+    document.getElementById('emailInput').value='';
+    toast('Welcome to NupurAIArts! 🎉');
+}
+
+// ============ KEYBOARD SHORTCUT ============
+document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.shiftKey&&(e.key==='A'||e.key==='a')){e.preventDefault();showLogin()}});
+
+// ============ ADMIN ============
+function showLogin(){document.getElementById('loginOverlay').classList.add('active');document.getElementById('aUser').focus()}
+function hideLogin(){document.getElementById('loginOverlay').classList.remove('active');document.getElementById('aErr').style.display='none'}
+function showSetupGuide(){document.getElementById('setupModal').classList.add('active')}
+
+function doLogin(e){
+    e.preventDefault();
+    const c=getCreds(),u=document.getElementById('aUser').value,p=document.getElementById('aPass').value;
+    if(u===c.u&&p===c.p){hideLogin();document.getElementById('dashboard').classList.add('active');document.body.style.overflow='hidden';renderDash();toast('Welcome back! 👋')}
+    else{document.getElementById('aErr').style.display='block';document.getElementById('aPass').value=''}
+}
+
+function doLogout(){document.getElementById('dashboard').classList.remove('active');document.body.style.overflow='';document.getElementById('aUser').value='';document.getElementById('aPass').value='';renderFront();toast('Logged out ✅')}
+
+function goTab(tab,el){
+    curTab=tab;
+    document.querySelectorAll('.a-tab').forEach(t=>t.classList.remove('active'));
+    document.getElementById(tab).classList.add('active');
+    document.querySelectorAll('.a-nav-item').forEach(n=>n.classList.remove('active'));
+    if(el)el.classList.add('active');
+    const titles={dash:'Dashboard',prod:'Products',tut:'Tutorials',prm:'Prompts',fil:'Files',subs:'Subscribers',set:'Settings'};
+    document.getElementById('pageTitle').textContent=titles[tab]||'Dashboard';
+    document.getElementById('addBtn').style.display=['set','dash','subs'].includes(tab)?'none':'inline-flex';
+    renderTab(tab);
+}
+
+function renderDash(){
+    const p=DB.get('products'),t=DB.get('tutorials'),pr=DB.get('prompts'),s=DB.get('subscribers');
+    document.getElementById('sP').textContent=p.length;
+    document.getElementById('sT').textContent=t.length;
+    document.getElementById('sPr').textContent=pr.length;
+    document.getElementById('sE').textContent=s.length;
+    const all=[...p.map(x=>({...x,_t:'product'})),...t.map(x=>({...x,_t:'tutorial'})),...pr.map(x=>({...x,_t:'prompt'}))];
+    all.sort((a,b)=>(b.created||0)-(a.created||0));
+    const c=document.getElementById('recent');
+    c.innerHTML=all.length?all.slice(0,8).map(i=>`<div class="a-item"><div class="a-item-info"><h4>${i.title}</h4><p>${i._t} • ${new Date(i.created).toLocaleDateString()}</p></div></div>`).join(''):'<div class="a-empty"><i class="fas fa-inbox"></i><p>No items yet!</p></div>';
+    checkStorage();
+}
+
+function renderTab(tab){
+    if(tab==='dash'){renderDash();return}
+    if(tab==='subs'){renderSubs();return}
+    const map={prod:'products',tut:'tutorials',prm:'prompts',fil:'files'};
+    const key=map[tab];if(!key)return;
+    const items=DB.get(key);
+    const cid={prod:'prodList',tut:'tutList',prm:'prmList',fil:'filList'}[tab];
+    const c=document.getElementById(cid);
+    if(!items.length){c.innerHTML='<div class="a-empty"><i class="fas fa-folder-open"></i><p>Empty! Click "+ Add New"</p></div>';return}
+    c.innerHTML=items.map((item,i)=>`<div class="a-item"><div class="a-item-info"><h4>${item.title}</h4><p>${item.description?item.description.substring(0,60)+'...':'No description'}</p>
+    <span class="a-badge" style="background:${item.status==='active'?'rgba(16,185,129,0.15)':item.status==='featured'?'rgba(245,158,11,0.15)':'rgba(255,255,255,0.05)'};color:${item.status==='active'?'#34d399':item.status==='featured'?'#fbbf24':'rgba(255,255,255,0.4)'}">${item.status||'active'}</span>
+    ${item.price?`<span class="a-badge" style="background:rgba(124,58,237,0.15);color:#c4b5fd;margin-left:5px">$${item.price}</span>`:''}
+    </div><div class="a-item-btns">
+    ${item.fileData||item.externalLink?`<button class="a-ibtn dl" onclick="dlFile('${key}',${i})"><i class="fas fa-download"></i></button>`:''}
+    <button class="a-ibtn edit" onclick="editI('${key}',${i})"><i class="fas fa-pen"></i></button>
+    <button class="a-ibtn del" onclick="delI('${key}',${i})"><i class="fas fa-trash"></i></button>
+    </div></div>`).join('');
+}
+
+function renderSubs(){
+    const subs=DB.get('subscribers');
+    const c=document.getElementById('subsList');
+    if(!subs.length){c.innerHTML='<div class="a-empty"><i class="fas fa-envelope"></i><p>No subscribers yet</p></div>';return}
+    c.innerHTML=`<div style="margin-bottom:15px"><button class="btn-primary" style="padding:10px 20px;font-size:13px" onclick="exportSubs()"><i class="fas fa-download"></i> Export CSV</button> <span style="font-size:13px;color:rgba(255,255,255,0.4)">${subs.length} subscribers</span></div>`+
+    subs.map((s,i)=>`<div class="a-item"><div class="a-item-info"><h4>${s.email}</h4><p>${new Date(s.date).toLocaleDateString()}</p></div><div class="a-item-btns"><button class="a-ibtn del" onclick="delSub(${i})"><i class="fas fa-trash"></i></button></div></div>`).join('');
+}
+
+function exportSubs(){
+    const subs=DB.get('subscribers');
+    const csv='Email,Date\n'+subs.map(s=>`${s.email},${new Date(s.date).toLocaleDateString()}`).join('\n');
+    const blob=new Blob([csv],{type:'text/csv'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='subscribers.csv';a.click();
+    toast('Exported! 📥');
+}
+function delSub(i){const s=DB.get('subscribers');s.splice(i,1);DB.set('subscribers',s);renderSubs();renderDash()}
+
+// ============ MODAL ============
+function openAdd(){
+    document.getElementById('modal').classList.add('active');
+    document.getElementById('mTitle').textContent='Add New';
+    document.getElementById('mForm').reset();
+    document.getElementById('eId').value='';document.getElementById('fName').textContent='';
+    selColor='linear-gradient(135deg,#7c3aed,#2563eb)';
+    document.querySelectorAll('.copt').forEach((c,i)=>c.classList.toggle('sel',i===0));
+    const m={prod:'product',tut:'tutorial',prm:'prompt',fil:'file'};
+    if(m[curTab])document.getElementById('iType').value=m[curTab];
+    togFields();upFile=null;
+}
+function closeM(){document.getElementById('modal').classList.remove('active')}
+
+function togFields(){
+    const t=document.getElementById('iType').value;
+    document.getElementById('prmF').style.display=t==='prompt'?'block':'none';
+    document.getElementById('tutF').style.display=t==='tutorial'?'block':'none';
+    document.getElementById('priceR').style.display=t==='prompt'?'none':'grid';
+    document.getElementById('catR').style.display=t==='prompt'?'none':'grid';
+    document.getElementById('fileG').style.display=(t==='file'||t==='product')?'block':'none';
+}
+
+document.getElementById('colOpts').addEventListener('click',e=>{const o=e.target.closest('.copt');if(!o)return;document.querySelectorAll('.copt').forEach(c=>c.classList.remove('sel'));o.classList.add('sel');selColor=o.dataset.c});
+
+function handleFile(e){
+    const f=e.target.files[0];if(!f)return;
+    if(f.size>4*1024*1024){toast('Too large! Use external link ⚠️');document.getElementById('fName').textContent='⚠️ Use link instead';upFile=null;return}
+    document.getElementById('fName').textContent='📄 '+f.name;
+    const r=new FileReader();r.onload=ev=>{upFile={name:f.name,type:f.type,data:ev.target.result}};r.readAsDataURL(f);
+}
+
+function saveI(e){
+    e.preventDefault();
+    const type=document.getElementById('iType').value;
+    const item={id:document.getElementById('eId').value||Date.now().toString(),title:document.getElementById('iTitle').value,description:document.getElementById('iDesc').value,price:document.getElementById('iPrice').value,originalPrice:document.getElementById('iOrig').value,category:document.getElementById('iCat').value,status:document.getElementById('iStat').value,color:selColor,externalLink:document.getElementById('extL').value,created:parseInt(document.getElementById('eId').value)||Date.now()};
+    if(type==='prompt'){item.platform=document.getElementById('pPlat').value;item.promptText=document.getElementById('pText').value;item.premium=document.getElementById('pPrem').checked}
+    if(type==='tutorial'){item.duration=document.getElementById('tDur').value;item.badge=document.getElementById('tBadge').value;item.videoLink=document.getElementById('tLink').value}
+    if(upFile){item.fileName=upFile.name;item.fileData=upFile.data}
+    const key=type==='prompt'?'prompts':type==='tutorial'?'tutorials':type==='file'?'files':'products';
+    const items=DB.get(key);const idx=items.findIndex(i=>i.id===item.id);
+    if(idx>-1){if(!upFile&&items[idx].fileData){item.fileName=items[idx].fileName;item.fileData=items[idx].fileData}items[idx]=item}else items.push(item);
+    DB.set(key,items);upFile=null;closeM();renderDash();renderTab(curTab);renderFront();toast('Saved! ✅');
+}
+
+function editI(key,idx){
+    const items=DB.get(key),item=items[idx];if(!item)return;
+    document.getElementById('modal').classList.add('active');
+    document.getElementById('mTitle').textContent='Edit';
+    const tm={products:'product',tutorials:'tutorial',prompts:'prompt',files:'file'};
+    document.getElementById('iType').value=tm[key];
+    document.getElementById('eId').value=item.id;
+    document.getElementById('iTitle').value=item.title||'';
+    document.getElementById('iDesc').value=item.description||'';
+    document.getElementById('iPrice').value=item.price||'';
+    document.getElementById('iOrig').value=item.originalPrice||'';
+    document.getElementById('iCat').value=item.category||'pdf';
+    document.getElementById('iStat').value=item.status||'active';
+    document.getElementById('extL').value=item.externalLink||'';
+    document.getElementById('fName').textContent=item.fileName?'📄 '+item.fileName:'';
+    if(key==='prompts'){document.getElementById('pPlat').value=item.platform||'Midjourney v6';document.getElementById('pText').value=item.promptText||'';document.getElementById('pPrem').checked=item.premium||false}
+    if(key==='tutorials'){document.getElementById('tDur').value=item.duration||'';document.getElementById('tBadge').value=item.badge||'free';document.getElementById('tLink').value=item.videoLink||''}
+    selColor=item.color||'linear-gradient(135deg,#7c3aed,#2563eb)';
+    document.querySelectorAll('.copt').forEach(c=>c.classList.toggle('sel',c.dataset.c===selColor));
+    togFields();upFile=null;
+}
+
+function delI(key,idx){if(!confirm('Delete?'))return;const items=DB.get(key);items.splice(idx,1);DB.set(key,items);renderDash();renderTab(curTab);renderFront();toast('Deleted ✅')}
+
+function dlFile(key,idx){const items=DB.get(key),item=items[idx];if(item.externalLink){window.open(item.externalLink,'_blank');return}if(!item.fileData){toast('No file');return}const a=document.createElement('a');a.href=item.fileData;a.download=item.fileName||'download';a.click()}
+
+function chgPass(){
+    const c=document.getElementById('curP').value,n=document.getElementById('newP').value,cn=document.getElementById('conP').value;
+    if(c!==getCreds().p){toast('Wrong password! ❌');return}
+    if(n.length<4){toast('Min 4 chars! ❌');return}
+    if(n!==cn){toast('No match! ❌');return}
+    DB.setOne('pass',n);document.getElementById('curP').value='';document.getElementById('newP').value='';document.getElementById('conP').value='';toast('Password updated! 🔐');
+}
+function chgUser(){const u=document.getElementById('newU').value.trim();if(u.length<3){toast('Min 3 chars! ❌');return}DB.setOne('user',u);document.getElementById('newU').value='';toast('Username → '+u+' ✅')}
+
+// ============ FRONTEND ============
+function renderFront(){renderProducts();renderTutorials();renderPrompts()}
+
+function renderProducts(){
+    const products=[...DB.get('products'),...DB.get('files')].filter(p=>p.status!=='draft');
+    const g=document.getElementById('productsGrid');
+    const ic={pdf:'📄',video:'🎬',bundle:'📦',template:'🎨',course:'🎓',ebook:'📚',preset:'⚡'};
+    if(!products.length){g.innerHTML=`
+        <div class="product-card reveal active"><div class="product-thumb" style="background:linear-gradient(135deg,#7c3aed,#2563eb)"><span style="font-size:50px">📦</span><span class="product-type-badge" style="color:#f59e0b">Bundle</span><span class="product-price-badge">$29</span></div><div class="product-info"><h3>AI Art Starter Pack</h3><p>50 premium prompts + guide.</p><div class="product-actions"><button class="product-btn buy"><i class="fas fa-cart-shopping"></i> Get</button><button class="product-btn preview"><i class="fas fa-eye"></i> Preview</button></div></div></div>
+        <div class="product-card reveal active"><div class="product-thumb" style="background:linear-gradient(135deg,#ec4899,#f59e0b)"><span style="font-size:50px">📄</span><span class="product-type-badge" style="color:#ef4444">PDF</span><span class="product-price-badge">$9</span></div><div class="product-info"><h3>Prompt Cheatsheet</h3><p>Ultimate prompt reference guide.</p><div class="product-actions"><button class="product-btn buy"><i class="fas fa-cart-shopping"></i> Get</button><button class="product-btn preview"><i class="fas fa-eye"></i> Preview</button></div></div></div>
+        <div class="product-card reveal active"><div class="product-thumb" style="background:linear-gradient(135deg,#06b6d4,#10b981)"><span style="font-size:50px">🎓</span><span class="product-type-badge" style="color:#8b5cf6">Course</span><span class="product-price-badge">$49</span></div><div class="product-info"><h3>Web3 Masterclass</h3><p>Sell AI art in Web3.</p><div class="product-actions"><button class="product-btn buy"><i class="fas fa-cart-shopping"></i> Get</button><button class="product-btn preview"><i class="fas fa-eye"></i> Preview</button></div></div></div>`;return}
+    g.innerHTML=products.map(p=>`<div class="product-card reveal active"><div class="product-thumb" style="background:${p.color||'linear-gradient(135deg,#7c3aed,#2563eb)'}"><span style="font-size:50px">${ic[p.category]||'📦'}</span><span class="product-type-badge" style="color:${p.category==='pdf'?'#ef4444':p.category==='course'?'#8b5cf6':'#f59e0b'}">${p.category||'Product'}</span>${p.price&&p.price!=='Free'&&p.price!=='0'?`<span class="product-price-badge">$${p.price}</span>`:p.price==='Free'||p.price==='0'?`<span class="product-price-badge" style="background:linear-gradient(135deg,#10b981,#06b6d4)">Free</span>`:''}</div><div class="product-info"><h3>${p.title}</h3><p>${p.description||'Premium content.'}</p><div class="product-actions">${p.externalLink?`<a href="${p.externalLink}" target="_blank" class="product-btn buy" style="text-decoration:none"><i class="fas fa-cart-shopping"></i> Get</a>`:`<button class="product-btn buy" onclick="toast('Coming soon!')"><i class="fas fa-cart-shopping"></i> Get</button>`}<button class="product-btn preview" onclick="toast('Members only!')"><i class="fas fa-eye"></i> Preview</button></div></div></div>`).join('');
+}
+
+function renderTutorials(){
+    const tuts=DB.get('tutorials').filter(t=>t.status!=='draft');
+    const g=document.getElementById('tutorialsGrid');
+    const bc={free:'#10b981',premium:'#f59e0b',new:'#ec4899'};
+    if(!tuts.length){g.innerHTML=`
+        <div class="product-card reveal active"><div class="product-thumb" style="background:linear-gradient(135deg,#7c3aed,#2563eb)"><span style="font-size:50px">🎨</span><span class="product-type-badge" style="color:#10b981">Free</span></div><div class="product-info"><h3>Midjourney v6 Masterclass</h3><p>Complete guide for photorealistic images.</p><div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.4)"><span>⏱ 3h 45min</span><span style="color:#f59e0b">★ 4.9</span></div></div></div>
+        <div class="product-card reveal active"><div class="product-thumb" style="background:linear-gradient(135deg,#ec4899,#f59e0b)"><span style="font-size:50px">✨</span><span class="product-type-badge" style="color:#f59e0b">Premium</span></div><div class="product-info"><h3>Prompt Engineering Secrets</h3><p>The formula for jaw-dropping artwork.</p><div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.4)"><span>⏱ 2h 15min</span><span style="color:#f59e0b">★ 4.8</span></div></div></div>
+        <div class="product-card reveal active"><div class="product-thumb" style="background:linear-gradient(135deg,#06b6d4,#10b981)"><span style="font-size:50px">🌐</span><span class="product-type-badge" style="color:#ec4899">New</span></div><div class="product-info"><h3>AI Art as NFTs Guide</h3><p>Mint and sell on blockchain.</p><div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.4)"><span>⏱ 1h 50min</span><span style="color:#f59e0b">★ 4.7</span></div></div></div>`;return}
+    g.innerHTML=tuts.map(t=>`<div class="product-card reveal active" ${t.videoLink?`onclick="window.open('${t.videoLink}','_blank')" style="cursor:pointer"`:''}>
+    <div class="product-thumb" style="background:${t.color||'linear-gradient(135deg,#7c3aed,#2563eb)'}"><span style="font-size:50px">🎬</span><span class="product-type-badge" style="color:${bc[t.badge]||'#10b981'}">${t.badge||'free'}</span></div>
+    <div class="product-info"><h3>${t.title}</h3><p>${t.description||'AI art tutorial.'}</p><div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.4)"><span>⏱ ${t.duration||'--'}</span><span style="color:#f59e0b">★ 4.8</span></div></div></div>`).join('');
+}
+
+function renderPrompts(){
+    const prompts=DB.get('prompts').filter(p=>p.status!=='draft');
+    const g=document.getElementById('promptsGrid');
+    if(!prompts.length){g.innerHTML=`
+        <div class="prompt-card reveal active"><div class="prompt-header"><span class="prompt-category">Midjourney v6</span><span class="prompt-lock free-lock"><i class="fas fa-lock-open"></i> Free</span></div><h3>Cinematic Portrait</h3><div class="prompt-preview">portrait of a mysterious woman, cinematic lighting, golden hour, lens flare, Canon EOS R5, 85mm f/1.4 --ar 2:3 --v 6 --style raw</div><div class="prompt-actions"><button class="prompt-btn copy" onclick="copyP(this)"><i class="fas fa-copy"></i> Copy</button></div></div>
+        <div class="prompt-card reveal active"><div class="prompt-header"><span class="prompt-category">DALL·E 3</span><span class="prompt-lock free-lock"><i class="fas fa-lock-open"></i> Free</span></div><h3>Fantasy Landscape</h3><div class="prompt-preview">breathtaking fantasy landscape, floating islands, bioluminescent trees, crystal waterfalls, twin moons, purple twilight</div><div class="prompt-actions"><button class="prompt-btn copy" onclick="copyP(this)"><i class="fas fa-copy"></i> Copy</button></div></div>
+        <div class="prompt-card reveal active"><div class="prompt-header"><span class="prompt-category">Stable Diffusion</span><span class="prompt-lock premium-lock"><i class="fas fa-lock"></i> Premium</span></div><h3>Product Photography</h3><div class="prompt-preview blurred">[Premium] Professional product shot formula...</div><div class="prompt-actions"><button class="prompt-btn unlock" onclick="toast('Join Premium! 🔐')"><i class="fas fa-crown"></i> Unlock</button></div></div>`;return}
+    g.innerHTML=prompts.map(p=>`<div class="prompt-card reveal active"><div class="prompt-header"><span class="prompt-category">${p.platform||'AI'}</span><span class="prompt-lock ${p.premium?'premium-lock':'free-lock'}"><i class="fas fa-${p.premium?'lock':'lock-open'}"></i> ${p.premium?'Premium':'Free'}</span></div><h3>${p.title}</h3><div class="prompt-preview ${p.premium?'blurred':''}">${p.premium?'[Premium] Join to unlock...':p.promptText||p.description||''}</div><div class="prompt-actions">${p.premium?`<button class="prompt-btn unlock" onclick="toast('Join Premium! 🔐')"><i class="fas fa-crown"></i> Unlock</button>`:`<button class="prompt-btn copy" onclick="copyP(this)"><i class="fas fa-copy"></i> Copy</button>`}</div></div>`).join('');
+}
+
+function copyP(btn){const t=btn.closest('.prompt-card').querySelector('.prompt-preview').textContent.trim();navigator.clipboard.writeText(t).then(()=>{toast('Copied! ✨');btn.innerHTML='<i class="fas fa-check"></i> Done!';setTimeout(()=>btn.innerHTML='<i class="fas fa-copy"></i> Copy',2000)})}
+
+renderFront();
+</script>
+</body>
+</html>
